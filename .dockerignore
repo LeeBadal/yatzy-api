@@ -1,0 +1,29 @@
+# Exclude files and directories that are not needed for the Docker build context
+.git
+.idea
+.vscode
+*.log
+*.out
+*.test
+*.prof
+*.pdf
+*.md
+*.txt
+
+# Exclude Go build artifacts
+*.exe
+*.test
+*.prof
+*.out
+*.test
+*.test.exe
+*.test.prof
+*.test.out
+*.test.test
+*.test.test.exe
+*.test.test.prof
+*.test.test.out
+
+# Exclude Docker build artifacts
+Dockerfile*
+.dockerignore

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1 # Number of replicas
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api-container
+          image: leebadal1/yatzy-api:v1
+          ports:
+            - containerPort: 8080 # Port your API listens on
+      imagePullSecrets:
+        - name: regcred
