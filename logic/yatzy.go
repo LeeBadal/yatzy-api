@@ -104,7 +104,7 @@ func isSubset(b []int, a []int) bool {
 func whatIfScore(gameState GameState) GameState {
 	dice := make([]int, len(gameState.Dice))
 	copy(dice, gameState.Dice)
-	gameState.ScoreCalculator = validators.CalculateScores(dice)
+	gameState.ScoreCalculator = validators.CalculateScores(dice, gameState.Players[gameState.CurrentPlayer].Score)
 	return gameState
 }
 
@@ -154,7 +154,7 @@ func CreateGame(players int) GameState {
 	gameState.CurrentPlayer = 0
 	gameState.RollsLeft = 2
 	gameState.Dice = rollDice([]int{0, 0, 0, 0, 0}, make([]int, 5))
-	gameState.ScoreCalculator = validators.CalculateScores(gameState.Dice)
+	gameState.ScoreCalculator = validators.CalculateScores(gameState.Dice, gameState.Players[gameState.CurrentPlayer].Score)
 	gameState.CategoryChoice = ""
 	gameState.RoundsLeft = len(gameState.Players[0].Score)
 	gameState.Uuid = uuid.New().String()

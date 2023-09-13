@@ -197,7 +197,19 @@ func Sixes(dice []int) int {
 	return Upper(dice, 6)
 }
 
-func CalculateScores(dice []int) map[string]int {
+func Bonus(currentPlayerScore map[string]int) int {
+	sum := 0
+	upperKeys := []string{"Ones", "Twos", "Threes", "Fours", "Fives", "Sixes"}
+	for _, key := range upperKeys {
+		sum += currentPlayerScore[key]
+	}
+	if sum >= 63 {
+		return 50
+	}
+	return 0
+}
+
+func CalculateScores(dice []int, currentPlayerScore map[string]int) map[string]int {
 	scores := make(map[string]int)
 	scores["Ones"] = Ones(dice)
 	scores["Twos"] = Twos(dice)
@@ -214,5 +226,6 @@ func CalculateScores(dice []int) map[string]int {
 	scores["FullHouse"] = FullHouse(dice)
 	scores["Chance"] = Chance(dice)
 	scores["Yatzy"] = Yatzy(dice)
+	scores["Bonus"] = Bonus(currentPlayerScore)
 	return scores
 }

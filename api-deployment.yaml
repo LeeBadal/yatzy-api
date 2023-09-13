@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-container
-          image: leebadal1/yatzy-api:v1
+          image: leebadal1/yatzy-api:v1.10
           ports:
             - containerPort: 8080 # Port your API listens on
       imagePullSecrets:
