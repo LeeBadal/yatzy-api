@@ -301,7 +301,6 @@ func TestBonus(t *testing.T) {
 
 func TestBonus2(t *testing.T) {
 	dice := map[string]int{
-		"Bonus":         -1,
 		"Chance":        -1,
 		"Fives":         15,
 		"FourOfAKind":   -1,
@@ -322,5 +321,30 @@ func TestBonus2(t *testing.T) {
 	want := 50
 	if got != want {
 		t.Errorf("isBonus(%v) = %v, want %v", dice, got, want)
+	}
+}
+
+func TestTotal(t *testing.T) {
+	dice := map[string]int{
+		"Chance":        -1,
+		"Fives":         15,
+		"FourOfAKind":   -1,
+		"Fours":         12,
+		"FullHouse":     -1,
+		"LargeStraight": -1,
+		"OnePair":       -1,
+		"Ones":          3,
+		"Sixes":         18,
+		"SmallStraight": -1,
+		"ThreeOfAKind":  -1,
+		"Threes":        9,
+		"TwoPairs":      -1,
+		"Twos":          6,
+		"Yatzy":         -1,
+	}
+	got := Total(dice)
+	want := 63
+	if got != want {
+		t.Errorf("isTotal(%v) = %v, want %v", dice, got, want)
 	}
 }

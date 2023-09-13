@@ -171,7 +171,6 @@ func CreatePlayer(name string) Player {
 		"Fours":  -1,
 		"Fives":  -1,
 		"Sixes":  -1,
-		"Bonus":  -1,
 
 		"OnePair":       -1,
 		"TwoPairs":      -1,

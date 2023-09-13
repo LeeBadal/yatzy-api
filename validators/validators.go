@@ -209,6 +209,16 @@ func Bonus(currentPlayerScore map[string]int) int {
 	return 0
 }
 
+func Total(currentPlayerScore map[string]int) int {
+	sum := 0
+	for _, value := range currentPlayerScore {
+		if value != -1 {
+			sum += value
+		}
+	}
+	return sum
+}
+
 func CalculateScores(dice []int, currentPlayerScore map[string]int) map[string]int {
 	scores := make(map[string]int)
 	scores["Ones"] = Ones(dice)
@@ -227,5 +237,6 @@ func CalculateScores(dice []int, currentPlayerScore map[string]int) map[string]i
 	scores["Chance"] = Chance(dice)
 	scores["Yatzy"] = Yatzy(dice)
 	scores["Bonus"] = Bonus(currentPlayerScore)
+	scores["Total"] = Total(currentPlayerScore)
 	return scores
 }
