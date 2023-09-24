@@ -81,6 +81,16 @@ spec:
 
 apply deployment
 
+### First time running database
+For running the database for the first time, you will need to generate a user/password for psql:
+In this case we choose to store the secrets in the k8 cluster using the database-creds.yaml
+As this contains sensitive data the repo contains a database-creds-template.yaml in which you can add you username/password for the service.
+
+Enter a username/password and deploy the secret to using kubectl:
+
+1. kubectl apply -f database-credentials-secret.yaml
+
+
 
 ### Applying deployment
 
@@ -110,26 +120,10 @@ to find this use:
 kubectl describe svc api-service 
 look for NodePort
 
-### finding URL for your service:
-minikube service <service-name> --url
-
-(on windows terminal has to remain open, url will change on restart)
-
-
-
-### Quick launch
-1. Start Docker Desktop, use minikube context
-2. start minikube (minikube start)
-3. Apply everything (see above)
-4. Get the url for the service (see finding url for your service)
-
-
 
 ### Making changes and redeploying to minikube
 1. Making changes to code
 2. Clean up deployment
-
-
 
 
 ### Troubleshooting
@@ -175,3 +169,26 @@ Sometimes, restarting Docker and Minikube can resolve various context-related is
 
 Restart Docker Desktop.
 Restart Minikube using minikube stop followed by minikube start.
+
+
+### finding URL for your service:
+minikube service <service-name> --url
+
+(on windows terminal has to remain open, url will change on restart)
+
+### Quick launch
+1. Start Docker Desktop, use minikube context
+2. start minikube (minikube start)
+3. Apply everything (see above)
+4. Get the url for the service (see finding url for your service)
+
+
+
+### Api2
+
+protoc --go_out=plugins=grpc:. dbservice.proto
+
+example:
+protoc -I api/ api/user.proto --go_out=plugins=grpc:service1/
+protoc -I api/ api/user.proto --go_out=plugins=grpc:service2/
+

@@ -17,3 +17,5 @@
 # Go workspace file
 go.work
 todok8.txt
+
+database-credentials.yaml

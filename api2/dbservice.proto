@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package db;
+
+option go_package = "yatzy/cmd/dbservice";
+
+service DatabaseService {
+  rpc AddGame (AddGameRequest) returns (AddGameResponse);
+  rpc GetGame (GetGameRequest) returns (GetGameResponse);
+}
+
+message AddGameRequest {
+  string uuid = 1;
+  map<string, string> game_state = 2;
+}
+
+message AddGameResponse {
+  // Define response message fields, if any
+}
+
+message GetGameRequest {
+  string uuid = 1;
+}
+
+message GetGameResponse {
+  string uuid = 1;
+  map<string, string> game_state = 2;
+}
+
+
