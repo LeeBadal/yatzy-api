@@ -1,6 +1,43 @@
+## Yatzy API
+This Yatzy engine is a buffed implementation of a simple game, function wise its simple and contains three endpoints:
+
+- CreateGame
+- RollDice
+- SubmitChoice
+
+The API is built using golang and grpc, it uses a postgres database for storing data. It's deployed using kubernetes and docker.
+It's built with a microservice architecture in mind, and is designed to be scalable. 
+
+Horizontal scaling is done by running multiple instances of api-deployment
+
+For details look at archiectural diagram under [Architecture](#architecture-hld)
+
+## Table of Contents
+- [Yatzy API](#yatzy-api)
+- [Table of Contents](#table-of-contents)
+- [Future development](#Backlog)
+- [Prerequisites](#prerequisites)
+- [Basic Usage](#basic-usage)
+- [Running Tests](#running-tests)
+- [Docker hub](#docker-hub)
+
+## Backlog
+- Websocket for online play
+- Leaderboard
+- Horizontal scaling for db service
+
+
+## Architecture (HLD)
+![Architecture](hld/hld.png)
+
+
+
 ## Prerequisites
 
 * Docker CLI
+* Minikube
+* Protoc
+
 
 ## Basic Usage
 
@@ -13,7 +50,7 @@ docker run -p 8080:8080 yatzy-api
 ```
 
 ## Running Tests
-To run tests, go to the directory you want to run the tests in.
+To run tests, navigate to the test directory.
 
 Then run:  
 ```bash
@@ -21,16 +58,23 @@ go test -v
 ```
 
 ## Docker hub
-For this project we use docker hub for our container registry, since they offer 1 free private repo.
+For this project we use docker hub for our container registry, to push to docker hub you must first login using:
 
-docker push leebadal1/yatzy-api:tagname
+```bash
+docker login
+```
+
+Then you can push to docker hub using:
+
+```bash
+docker push <username>/<repo>:<tag>
+```
 
 
-## Pushing to docker hub
+## Pushing to docker hub and deploying to kubernetes
 
-PS. REMEMBER TO: docker login 
+### Docker hub
 
-Locate root directory
 
 Build docker image for kubernetes: 
 1. docker build -t yatzy-api:v1(+1) . 
@@ -48,51 +92,34 @@ spec:
         - name: regcred
 
 
+### Kubernetes
 Since the repo is private you must create a secret:
-
+```bash	
 kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=leebadal1 --docker-password=<your-pword> --docker-email=<your-email>
+```
 
-Once you have pushed to docker hub and updated deployment, apply all api-*.yaml's with kubectl (see below)
+Once you have pushed to docker hub and updated deployment, apply all api-*.yaml's with 
+```bash	
+kubectl apply -f <filename>
+```
 
-You will have to get a new minikube service url by running:
-
+Now your service should be running, to get the url for the api-service run:
+```bash
 minikube service api-service --url
-
-### Minikube
-
-Enable kubernetes in docker
-
-download minikube & run: minikube start --driver=docker
-
-run: minikube dashboard or minikube ip to verify
-
-Build docker image for kubernetes: 
-1. docker build -t yatzy-api:v1 .
-Tag local image
-2. docker tag yatzy-api:v1 $(minikube ip):5000/yatzy-api:v1
-Push image to intenal registry
-3. docker push $(minikube ip):5000/yatzy-api:v1
-Create kubernetes deployment (see below)
-4. 
-spec:
-  containers:
-    - name: api-container
-      image: $(minikube ip):5000/yatzy-api:v1
-
-apply deployment
+```
 
 ### First time running database
 For running the database for the first time, you will need to generate a user/password for psql:
 In this case we choose to store the secrets in the k8 cluster using the database-creds.yaml
-As this contains sensitive data the repo contains a database-creds-template.yaml in which you can add you username/password for the service.
+As this contains sensitive data the repo contains a database-credentials-template.yaml in which you can add you username/password for the service.
 
 Enter a username/password and deploy the secret to using kubectl:
 
-1. kubectl apply -f database-credentials-secret.yaml
+```bash	
+kubectl apply -f database-credentials.yaml
+```
 
-
-
-### Applying deployment
+### 
 
 1. kubectl apply -f api-deployment.yaml 
 2. kubectl apply -f api-ingress.yaml
@@ -104,66 +131,45 @@ kubectl delete deployment api-deployment
 kubectl delete ingress api-ingress
 kubectl delete service api-service
 
-## When running
-### Get status
+## Useful commands
+
+```bash	
 kubectl get deployment
+```
 
-### Get pods
+```bash
 kubectl get pods
+```
 
-### View logs of pods
+```bash
+kubectl get services
+```
+
+```bash
+kubectl get ingress
+```
+Describe a resource
+```bash
+kubectl describe <resource> <resource-name>
+```
+
+View logs of pod
+```bash
 kubectl logs <pod-name>
-
-### Get node-ip & node-port
-to reach the service, we have exposed a node-port. which is 30000 defined in service
-to find this use: 
-kubectl describe svc api-service 
-look for NodePort
+```
 
 
 ### Making changes and redeploying to minikube
 1. Making changes to code
-2. Clean up deployment
+2. Build docker image
+3. Push to docker hub
+4. Update deployment with new image
+5. Apply deployment to minikube
 
 
 ### Troubleshooting
 
-If you intalled minikube as an elevated user, run elevated command prompts when runnign commands.
-
-
-If you have issues with $(minikube ip) resolving, try these steps:
-
-Check Docker Contexts:
-
-Run the following command to list your Docker contexts:
-
-sh
-Copy code
-docker context ls
-If you see any issues with the contexts, such as missing or misconfigured context, try to fix them.
-
-Reset the Docker CLI Context:
-
-If the context associated with Minikube is causing problems, you can reset the Docker CLI context by running:
-
-sh
-Copy code
-docker context use default
-Replace "default" with the appropriate context name if it's different.
-
-Check Minikube Status:
-
-Ensure that Minikube is running and its status is normal:
-
-sh
-Copy code
-minikube status
-If Minikube is not running, start it using:
-
-sh
-Copy code
-minikube start
-Restart Docker and Minikube:
+If you intalled minikube as an elevated user, run elevated command prompts when running commands.
 
 Sometimes, restarting Docker and Minikube can resolve various context-related issues:
 
@@ -171,24 +177,32 @@ Restart Docker Desktop.
 Restart Minikube using minikube stop followed by minikube start.
 
 
-### finding URL for your service:
+### Finding URL for your service
+```bash
 minikube service <service-name> --url
+```
 
 (on windows terminal has to remain open, url will change on restart)
 
 ### Quick launch
 1. Start Docker Desktop, use minikube context
-2. start minikube (minikube start)
+2. Start minikube (minikube start)
 3. Apply everything (see above)
 4. Get the url for the service (see finding url for your service)
 
 
 
-### Api2
+### Generating proto files
+api2 contains proto files for now, to generate the go files run:
+```bash	
+protoc --go_out=. --go-grpc_out=. dbservice.proto
+```
 
-protoc --go_out=plugins=grpc:. dbservice.proto
+run this then move the files to cmd/dbservice
 
-example:
-protoc -I api/ api/user.proto --go_out=plugins=grpc:service1/
-protoc -I api/ api/user.proto --go_out=plugins=grpc:service2/
+### cmd/dbservice
+dbservice is the service that manages db interactions, it has a grpc interface, db actions and manages migrations of the db.
+Migrations are manageed automatically, but any changes require you to generate a new migration using goose.
+
+
 

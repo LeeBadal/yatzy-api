@@ -15,7 +15,7 @@ message AddGameRequest {
 }
 
 message AddGameResponse {
-  // Define response message fields, if any
+  bool success = 1;
 }
 
 message GetGameRequest {
