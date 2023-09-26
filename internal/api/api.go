@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"yatzy/logic"
+	"yatzy/internal/logic"
 
 	"sync"
 

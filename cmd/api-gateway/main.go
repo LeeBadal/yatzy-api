@@ -1,7 +1,7 @@
 package main
 
 import (
-	"yatzy/api"
+	"yatzy/internal/api"
 )
 
 func main() {

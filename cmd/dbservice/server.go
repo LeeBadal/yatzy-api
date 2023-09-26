@@ -14,7 +14,7 @@ import (
 
 var embedMigrations embed.FS
 
-func main() {
+func Server() {
 	var db *sql.DB
 	// setup database
 

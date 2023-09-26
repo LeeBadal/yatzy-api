@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
-	"yatzy/validators"
+	"yatzy/internal/validators"
 
 	"github.com/google/uuid"
 )
