@@ -3,6 +3,7 @@ package dbservice
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 
@@ -16,17 +17,59 @@ type Game struct {
 	CreatedAt string                 `json:"created_at"`
 }
 
+type Config struct {
+	DBHost     string `json:"db_host"`
+	DBPort     string `json:"db_port"`
+	DBUser     string `json:"db_user"`
+	DBPassword string `json:"db_password"`
+	DBName     string `json:"db_name"`
+}
+
 // InitializeDB initializes the database connection.
 func InitializeDB() (*sql.DB, error) {
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
+	var config Config
 
+	// Load the configuration file based on the environment
+	env := os.Getenv("ENV")
+	if env == "" {
+		env = "development"
+		configFile := fmt.Sprintf("config.%s.json", env)
+		file, err := os.Open(configFile)
+		if err != nil {
+			return nil, err
+		}
+		defer file.Close()
+
+		// Decode the configuration file
+		decoder := json.NewDecoder(file)
+		err = decoder.Decode(&config)
+		if err != nil {
+			return nil, err
+		}
+	} else if env == "production" {
+		config.DBHost = os.Getenv("DB_HOST")
+		config.DBPort = os.Getenv("DB_PORT")
+		config.DBUser = os.Getenv("DB_USER")
+		config.DBPassword = os.Getenv("DB_PASSWORD")
+		config.DBName = os.Getenv("DB_NAME")
+	} else {
+		return nil, errors.New("invalid environment")
+
+	}
+
+	// Set the environment variables
+	os.Setenv("DB_HOST", config.DBHost)
+	os.Setenv("DB_PORT", config.DBPort)
+	os.Setenv("DB_USER", config.DBUser)
+	os.Setenv("DB_PASSWORD", config.DBPassword)
+	os.Setenv("DB_NAME", config.DBName)
+
+	// Create the connection string
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+		config.DBHost, config.DBPort, config.DBUser, config.DBPassword, config.DBName)
 
+	fmt.Println(connStr)
+	// Open the database connection
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

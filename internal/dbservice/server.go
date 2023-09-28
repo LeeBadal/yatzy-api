@@ -18,12 +18,18 @@ func Server() {
 	var db *sql.DB
 	// setup database
 
-	goose.SetBaseFS(embedMigrations)
+	//goose.SetBaseFS(embedMigrations)
+
+	db, err := InitializeDB()
+	if err != nil {
+		panic(err)
+	}
 
 	if err := goose.SetDialect("postgres"); err != nil {
 		panic(err)
 	}
 
+	//run migrations
 	if err := goose.Up(db, "migrations"); err != nil {
 		panic(err)
 	}

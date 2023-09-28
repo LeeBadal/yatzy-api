@@ -8,7 +8,7 @@ This Yatzy engine is a buffed implementation of a simple game, function wise its
 The API is built using golang and grpc, it uses a postgres database for storing data. It's deployed using kubernetes and docker.
 It's built with a microservice architecture in mind, and is designed to be scalable. 
 
-Horizontal scaling is done by running multiple instances of api-deployment
+The API is intended to scale horizontally by running multiple instances of api-deployment
 
 For details look at archiectural diagram under [Architecture](#architecture-hld)
 
@@ -202,7 +202,38 @@ run this then move the files to cmd/dbservice
 
 ### cmd/dbservice
 dbservice is the service that manages db interactions, it has a grpc interface, db actions and manages migrations of the db.
-Migrations are manageed automatically, but any changes require you to generate a new migration using goose.
+Migrations are manageed automatically.
+
+To start the dev db run:
+```bash
+docker compose up 
+```
+Add -d if you want to run in detached mode
+
+
+```bash
+docker-compose down
+```
+If you would ever need to reset the db, you can run:
+```bash
+docker-compose down -v
+```
+
+
+#### PgAdmin
+For dev, pgadmin is used to manage the db, it can be accessed at localhost:5050
+
+The first time you need to add the db server, if you are using the docker-compose database the details are:
+
+```json
+  host/address: db
+  port: 5432
+  maintenance databse: postgres
+  username: postgres
+  password: root
+```
+  
+
 
 
 
