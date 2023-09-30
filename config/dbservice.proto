@@ -4,6 +4,40 @@ package db;
 
 option go_package = "yatzy/cmd/dbservice";
 
+message GameState {
+  message Player {
+    string Name = 1;
+    Score Score = 2;
+  }
+
+  message Score {
+    int32 Chance = 1;
+    int32 Fives = 2;
+    int32 FourOfAKind = 3;
+    int32 Fours = 4;
+    int32 FullHouse = 5;
+    int32 LargeStraight = 6;
+    int32 OnePair = 7;
+    int32 Ones = 8;
+    int32 Sixes = 9;
+    int32 SmallStraight = 10;
+    int32 ThreeOfAKind = 11;
+    int32 Threes = 12;
+    int32 TwoPairs = 13;
+    int32 Twos = 14;
+    int32 Yatzy = 15;
+  }
+
+  repeated Player Players = 1;
+  int32 CurrentPlayer = 2;
+  int32 RollsLeft = 3;
+  repeated int32 Dice = 4;
+  int32 RoundsLeft = 5;
+  string CategoryChoice = 6;
+  Score ScoreCalculator = 7;
+  string Uuid = 8;
+}
+
 service DatabaseService {
   rpc AddGame (AddGameRequest) returns (AddGameResponse);
   rpc GetGame (GetGameRequest) returns (GetGameResponse);
@@ -11,7 +45,7 @@ service DatabaseService {
 
 message AddGameRequest {
   string uuid = 1;
-  map<string, string> game_state = 2;
+  GameState game_state = 2;
 }
 
 message AddGameResponse {
@@ -24,7 +58,7 @@ message GetGameRequest {
 
 message GetGameResponse {
   string uuid = 1;
-  map<string, string> game_state = 2;
+  GameState game_state = 2;
 }
 
 

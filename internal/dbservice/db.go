@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -68,7 +69,6 @@ func InitializeDB() (*sql.DB, error) {
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.DBHost, config.DBPort, config.DBUser, config.DBPassword, config.DBName)
 
-	fmt.Println(connStr)
 	// Open the database connection
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -81,11 +81,14 @@ func InitializeDB() (*sql.DB, error) {
 // AddGame adds a new game to the "games" table.
 func AddGame(db *sql.DB, uuid string, gameState map[string]interface{}) error {
 	// Convert the game state to JSON
+
+	log.Printf("gameState: %v", gameState)
 	gameStateJSON, err := json.Marshal(gameState)
 	if err != nil {
 		return err
 	}
 
+	log.Printf("gameStateJson: %v", gameStateJSON)
 	// Prepare the SQL statement to insert a new game
 	stmt, err := db.Prepare(`
         INSERT INTO games (id, game_state)
@@ -145,3 +148,5 @@ func GetGameByUUIDAndLatestVersion(db *sql.DB, uuid string) (*Game, error) {
 	// If no matching game is found, return an error or nil, depending on your use case
 	return nil, sql.ErrNoRows
 }
+
+// function to connect to db and

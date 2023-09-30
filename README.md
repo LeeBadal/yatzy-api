@@ -219,6 +219,9 @@ If you would ever need to reset the db, you can run:
 docker-compose down -v
 ```
 
+Migrations follow the naming convention: YYYYMMDDHHIISS_migration_name.sql
+
+
 
 #### PgAdmin
 For dev, pgadmin is used to manage the db, it can be accessed at localhost:5050
