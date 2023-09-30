@@ -18,6 +18,7 @@ For details look at archiectural diagram under [Architecture](#architecture-hld)
 - [Future development](#Backlog)
 - [Prerequisites](#prerequisites)
 - [Basic Usage](#basic-usage)
+- [Basic usage local (no kubernetes)](#basic-usage-local-no-kubernetes)
 - [Running Tests](#running-tests)
 - [Docker hub](#docker-hub)
 
@@ -39,7 +40,7 @@ For details look at archiectural diagram under [Architecture](#architecture-hld)
 * Protoc
 
 
-## Basic Usage
+## Basic Usage Docker
 
 ```bash
 docker build -t yatzy-api .
@@ -48,6 +49,15 @@ docker build -t yatzy-api .
 ```bash
 docker run -p 8080:8080 yatzy-api
 ```
+
+## Basic usage local (no kubernetes)
+Checklist:
+- [ ] Docker
+- [ ] Go to cmd/dbservice/dev and run docker-compose up
+- [ ] go to localhost:5050 (admin@admin.com / root) and add the db server
+- [ ] go to cmd/dbservice and run go run main.go
+- [ ] go to cmd/api and run go run main.go
+- [ ] Test api via localhost:8080
 
 ## Running Tests
 To run tests, navigate to the test directory.
@@ -191,7 +201,6 @@ minikube service <service-name> --url
 4. Get the url for the service (see finding url for your service)
 
 
-
 ### Generating proto files
 api2 contains proto files for now, to generate the go files run:
 ```bash	
@@ -220,8 +229,6 @@ docker-compose down -v
 ```
 
 Migrations follow the naming convention: YYYYMMDDHHIISS_migration_name.sql
-
-
 
 #### PgAdmin
 For dev, pgadmin is used to manage the db, it can be accessed at localhost:5050
