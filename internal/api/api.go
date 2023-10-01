@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"sync"
 
 	"yatzy/internal/converters"
 	"yatzy/internal/dbservice"
@@ -53,11 +52,6 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 }
 
-var (
-	gameMutex sync.Mutex
-	game      *logic.GameState
-)
-
 var targetAddress string
 
 func init() {
@@ -67,7 +61,7 @@ func init() {
 		targetAddress = "localhost:50051"
 	} else {
 		// Connect to the remote server
-		targetAddress = "dbservice-service"
+		targetAddress = "dbservice-service.default.svc.cluster.local:50051"
 	}
 }
 

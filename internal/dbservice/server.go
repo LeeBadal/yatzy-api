@@ -72,20 +72,16 @@ func Server() {
 func (s *dbServiceServer) AddGame(ctx context.Context, in *AddGameRequest) (*AddGameResponse, error) {
 	// Convert the game state to JSON format
 
-	log.Printf("gameState: %v", in)
 	gameStateJSON, err := protojson.Marshal(in.GetGameState())
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("gameState: %v", gameStateJSON)
 
 	// Unmarshal the JSON into a map[string]interface{}
 	var gameState map[string]interface{}
 	if err := json.Unmarshal(gameStateJSON, &gameState); err != nil {
 		return nil, err
 	}
-	log.Printf("gameState: %v", gameState)
 
 	// open db connection
 	db, err := InitializeDB()

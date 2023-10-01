@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: db-config
 data:
-  DB_HOST: postgres-service.default.svc.cluster.local
+  DB_HOST: postgres-service
   DB_PORT: "5432"
-  DB_NAME: yatz-postgres
+  DB_NAME: yatzleedbuser

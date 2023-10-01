@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: service2
+      app: dbservice
   template:
     metadata:
       labels:
-        app: service2
+        app: dbservice
     spec:
       containers:
-        - name: service2
-          image: your-service2-image:latest
+        - name: dbservice
+          image: leebadal1/yatzy-dbservice:v1.03
           env:
             - name: DB_HOST
               valueFrom:
@@ -35,11 +35,14 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: database-credentials
-                  key: DB_USER
+                  key: POSTGRES_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: database-credentials
-                  key: DB_PASSWORD
+                  key: POSTGRES_PASSWORD
+            - name: ENV
+              value: "production"
+            
           # Other environment variables and configuration as needed
 

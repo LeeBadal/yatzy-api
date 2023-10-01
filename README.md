@@ -43,12 +43,13 @@ For details look at archiectural diagram under [Architecture](#architecture-hld)
 ## Basic Usage Docker
 
 ```bash
-docker build -t yatzy-api .
+docker build -f yatzy.Dockerfile -t yatzy-api:v2 .
 ```
 
 ```bash
 docker run -p 8080:8080 yatzy-api
 ```
+
 
 ## Basic usage local (no kubernetes)
 Checklist:
@@ -89,7 +90,7 @@ docker push <username>/<repo>:<tag>
 Build docker image for kubernetes: 
 1. docker build -t yatzy-api:v1(+1) . 
 Tag local image
-2. docker tag yatzy-api:v1 leebadal1/yatzy-api:v1(+1)
+2. docker tag yatzy-api:{v2} leebadal1/yatzy-api:{v2}
 Push image to intenal registry
 3. docker push leebadal1/yatzy-api:tagname
 Create kubernetes deployment (see below)
@@ -135,7 +136,6 @@ kubectl apply -f database-credentials.yaml
 2. kubectl apply -f api-ingress.yaml
 3. kubectl apply -f api-service.yaml
 4. kubectl scale deployment api-deployment --replicas=3  (optional)
-5. kubectl port-forward svc/api-service 8080:80 ##
 6. CLEANUP 
 kubectl delete deployment api-deployment
 kubectl delete ingress api-ingress
@@ -189,7 +189,7 @@ Restart Minikube using minikube stop followed by minikube start.
 
 ### Finding URL for your service
 ```bash
-minikube service <service-name> --url
+ 
 ```
 
 (on windows terminal has to remain open, url will change on restart)
@@ -230,6 +230,14 @@ docker-compose down -v
 
 Migrations follow the naming convention: YYYYMMDDHHIISS_migration_name.sql
 
+To build the dbservice image run:
+```bash
+docker build -f dbservice.Dockerfile -t yatzy-dbservice:v1 .
+```
+
+docker tag yatzy-dbservice:v1 leebadal1/yatzy-dbservice:v1
+docker push leebadal1/yatzy-dbservice:v1
+
 #### PgAdmin
 For dev, pgadmin is used to manage the db, it can be accessed at localhost:5050
 
@@ -242,8 +250,28 @@ The first time you need to add the db server, if you are using the docker-compos
   username: postgres
   password: root
 ```
-  
 
+#### 
+
+```bash	
+kubectl apply -f database-credentials.yaml
+```
+
+### 
+
+1. kubectl apply -f database-credentials.yaml
+2. kubectl apply -f configmap.yaml
+2. kubectl apply -f api-deployment.yaml 
+3. kubectl apply -f api-service.yaml
+4. kubectl apply -f postgres-deployment.yaml
+5. kubectl apply -f postgres-service.yaml
+6. kubectl apply -f dbservice-deployment.yaml
+7. kubectl apply -f dbservice-service.yaml
+8. kubectl apply -f network-policy.yaml
+
+
+#### run a debug pod
+kubectl run -it --rm --restart=Never debug-pod --image=busybox -- /bin/sh
 
 
 

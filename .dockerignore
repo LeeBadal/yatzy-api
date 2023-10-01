@@ -27,3 +27,6 @@
 # Exclude Docker build artifacts
 Dockerfile*
 .dockerignore
+
+k8s
+hld

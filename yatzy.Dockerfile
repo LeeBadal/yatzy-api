@@ -7,6 +7,7 @@ WORKDIR /app
 # Copy the go.mod and go.sum files to the container
 COPY go.mod go.sum ./
 
+
 # Download the Go module dependencies
 RUN go mod download
 
@@ -14,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the application binary
-RUN go build -o yatzy .
+RUN go build -o yatzy ./cmd/api-gateway/
 
 # Expose port 8080 for the API
 EXPOSE 8080

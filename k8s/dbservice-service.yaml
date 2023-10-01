@@ -8,3 +8,4 @@ spec:
   ports:
     - protocol: TCP
       port: 50051  # Your gRPC service port
+      targetPort: 50051  # Your gRPC service port
