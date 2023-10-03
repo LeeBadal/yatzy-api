@@ -226,7 +226,7 @@ func submitChoice(c *gin.Context) {
 		log.Fatalf("AddGame failed: %v", err)
 	}
 	log.Printf("AddGame Response: %v", addGameResponse)
-	c.JSON(http.StatusOK, gin.H{"game": dbgame})
+	c.JSON(http.StatusOK, gin.H{"game": nextTurn})
 }
 
 func CreateGamePtr(players int) *logic.GameState {

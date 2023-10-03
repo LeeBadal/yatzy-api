@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -107,4 +108,18 @@ func EqualSlice(a []int, b []int) bool {
 		}
 	}
 	return true
+}
+
+func TestWhatIfScore(t *testing.T) {
+	game := CreateGame(2)
+	game.CategoryChoice = "ones"
+	game, _ = NextTurn(game, []int{})
+	game, _ = validateChoice(game)
+
+	want := 0
+	fmt.Printf("Score Calculator %v", game.Players[0].Score)
+	got := 0
+	if got != want {
+		t.Errorf("whatIfScore(%v) = %v, want %v", game, got, want)
+	}
 }

@@ -189,7 +189,7 @@ Restart Minikube using minikube stop followed by minikube start.
 
 ### Finding URL for your service
 ```bash
- 
+minikube service <service-name> --url
 ```
 
 (on windows terminal has to remain open, url will change on restart)
@@ -257,7 +257,16 @@ The first time you need to add the db server, if you are using the docker-compos
 kubectl apply -f database-credentials.yaml
 ```
 
-### 
+
+### Build and push api image
+```bash	
+docker build -f yatzy.Dockerfile -t yatzy-api:v2.03 .
+docker tag yatzy-api:v2.03 leebadal1/yatzy-api:v2.03 
+docker push leebadal1/yatzy-api:v2.02
+```
+
+
+### Applying all necessary yaml's & order
 
 1. kubectl apply -f database-credentials.yaml
 2. kubectl apply -f configmap.yaml
@@ -270,8 +279,12 @@ kubectl apply -f database-credentials.yaml
 8. kubectl apply -f network-policy.yaml
 
 
-#### run a debug pod
+#### debugging & dashboard
+
+##### debug pod
 kubectl run -it --rm --restart=Never debug-pod --image=busybox -- /bin/sh
 
+##### minikube dashboard
+minikube dashboard
 
 
