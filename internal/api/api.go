@@ -104,8 +104,8 @@ func createGame(c *gin.Context) {
 	addGameResponse, err := client.AddGame(context.Background(), newAddGameRequest)
 	if err != nil {
 		log.Fatalf("AddGame failed: %v", err)
+		log.Printf("AddGame Response: %v", addGameResponse)
 	}
-	log.Printf("AddGame Response: %v", addGameResponse)
 
 	c.JSON(http.StatusOK, gin.H{"game": game})
 }
@@ -142,8 +142,8 @@ func nextTurn(c *gin.Context) {
 	getGameResponse, err := client.GetGame(context.Background(), NewGetGameRequest)
 	if err != nil {
 		log.Fatalf("GetGame failed: %v", err)
+		log.Printf("GetGame Response: %v", getGameResponse)
 	}
-	log.Printf("GetGame Response: %v", getGameResponse)
 
 	gameval := getGameResponse.GetGameState()
 	convertedGameState := converters.ConvertDBGameStateToLogicGameState(gameval)
@@ -164,8 +164,8 @@ func nextTurn(c *gin.Context) {
 	addGameResponse, err := client.AddGame(context.Background(), newAddGameRequest)
 	if err != nil {
 		log.Fatalf("AddGame failed: %v", err)
+		log.Printf("Game Response %v", addGameResponse)
 	}
-	log.Printf("AddGame Response: %v", addGameResponse)
 
 	c.JSON(http.StatusOK, gin.H{"game": nextTurn})
 }
@@ -201,8 +201,8 @@ func submitChoice(c *gin.Context) {
 	getGameResponse, err := client.GetGame(context.Background(), NewGetGameRequest)
 	if err != nil {
 		log.Fatalf("GetGame failed: %v", err)
+		log.Printf("GetGame Response: %v", getGameResponse)
 	}
-	log.Printf("GetGame Response: %v", getGameResponse)
 
 	gameval := getGameResponse.GetGameState()
 	convertedGameState := converters.ConvertDBGameStateToLogicGameState(gameval)
@@ -224,8 +224,8 @@ func submitChoice(c *gin.Context) {
 	addGameResponse, err := client.AddGame(context.Background(), newAddGameRequest)
 	if err != nil {
 		log.Fatalf("AddGame failed: %v", err)
+		log.Printf("Game Response %v", addGameResponse)
 	}
-	log.Printf("AddGame Response: %v", addGameResponse)
 	c.JSON(http.StatusOK, gin.H{"game": nextTurn})
 }
 

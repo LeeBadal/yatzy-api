@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
-  replicas: 1 # Number of replicas
+  replicas: 2 # Number of replicas
   selector:
     matchLabels:
       app: api
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-container
-          image: leebadal1/yatzy-api:v2.04
+          image: leebadal1/yatzy-api:v2.06
           ports:
             - containerPort: 8080 # Port your API listens on
       imagePullSecrets:
