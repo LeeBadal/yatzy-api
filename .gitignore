@@ -19,3 +19,4 @@ go.work
 todok8.txt
 
 database-credentials.yaml
+doctl
