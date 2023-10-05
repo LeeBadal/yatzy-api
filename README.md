@@ -93,7 +93,8 @@ Checklist:
 - [ ] kubectl
 - [ ] Digital Ocean Kubernetes cluster
 - [ ] Nginx ingress controller
-- [ ] Two node pools
+- [ ] Cert manager
+- [ ] Two node pools 
 
 For my configuration i used 2vCPU, 4GB memory 100GB disk
 
@@ -102,22 +103,37 @@ You will also have to modify do-ingress.yaml to use your own host.
 To get started use this: https://docs.digitalocean.com/products/kubernetes/how-to/create-clusters/
 Swap your default context to the digital ocean context & apply all yamls.
 
-Besides all other configuration files you will also have to run:
+Besides all other configuration files you will also have to run a cert manager and ingress controller.
+
+I recommend running the test-issuer.yaml to check so that cert-manager is working correctly. You can do this by running:
+  
+```bash
+kubectl apply -f test-issuer.yaml
+```
+    
+Then check the status of the certificate by running:
+    
+```bash
+kubectl describe certificate cert-manager-test
+```
+After you've verified this you can delete the test-issuer.yaml by running:
+```bash
+kubectl delete -f test-issuer.yaml
+```
+
+
+I installed cert manager & nginx ingress using Digital ocean 1-click-apps.
+
+Next we use issuer.yaml, certificate.yaml & do-ingress.yaml to configure the ingress controller.
+
+Make sure to configure these for your own domain & update DNS records for your domain.
 
 ```bash
+kubectl apply -f issuer.yaml
+kubectl apply -f certificate.yaml
 kubectl apply -f do-ingress.yaml
 ```
 
-### First time running database
-For running the database for the first time, you will need to generate a user/password for psql:
-In this case we choose to store the secrets in the k8 cluster using the database-creds.yaml
-As this contains sensitive data the repo contains a database-credentials-template.yaml in which you can add you username/password for the service.
-
-Enter a username/password and deploy the secret to using kubectl:
-
-```bash	
-kubectl apply -f database-credentials.yaml
-```
 
 ## Development & Debugging
 
