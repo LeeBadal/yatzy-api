@@ -42,9 +42,10 @@ Specific instructions for each can be found under each section.
   - [Applying all necessary yaml's & order](#applying-all-necessary-yamls--order)
   - [Docker hub](#docker-hub)
 
-## Why Yatzy-api?
+## Why Yatzy-api? \(a personal note\)
 My partner and I are both yatzy-enthusiasts, we will play any time we find a good time and place for it, this could be a balcony in Greece, the beach on Sal or in the sofa on a friday evening.
-Coming from a computer science background I think in terms of strategy and optimization, my partner doesn't have the patience for me taking 5 minutes to calculate the best move, so i've surrendered to RNG and a sub-optimal strategy. This is refreshing, so I wanted to build something that reminded me of that sometimes it's okay to just roll the dice and see what happens.
+
+Coming from a computer science background I think in terms of strategy and optimization, my partner doesn't have the patience for me taking 5 minutes to calculate the best move, so i've surrendered to RNG and a sub-optimal strategy. This is refreshing, so I wanted to build something that reminded me of that sometimes it's okay to just **roll the dice and see what happens**.
 
 ## Backlog
 - Websocket for online play
